@@ -37,5 +37,5 @@ android.accept_sdk_license = True
 [buildozer]
 
 # Log level: 0 = errors only, 1 = info, 2 = debug
-log_level = 2
+log_level = 1
 warn_on_root = 1
