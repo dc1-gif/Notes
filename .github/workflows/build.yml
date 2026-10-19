@@ -23,8 +23,14 @@ jobs:
 
       - name: Build APK
         run: |
-          sed -i 's/log_level = 2/log_level = 1/' buildozer.spec
-          buildozer android debug > build.log 2>&1 || (tail -n 60 build.log && exit 1)
+          sed -i 's/log_level = .*/log_level = 2/' buildozer.spec
+          buildozer android debug > build.log 2>&1 || (grep -n -i -E "error|failed|not found|No such" build.log | grep -v -i "performance hint" | tail -n 40; exit 1)
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-log
+          path: build.log
 
       - uses: actions/upload-artifact@v4
         with:
