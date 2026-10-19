@@ -22,7 +22,9 @@ jobs:
           pip install buildozer cython==0.29.36
 
       - name: Build APK
-        run: buildozer android debug
+        run: |
+          sed -i 's/log_level = 2/log_level = 1/' buildozer.spec
+          buildozer android debug > build.log 2>&1 || (tail -n 60 build.log && exit 1)
 
       - uses: actions/upload-artifact@v4
         with:
