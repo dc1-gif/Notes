@@ -1,20 +1,37 @@
-[app]
-title = ListApp
-package.name = listapp
-package.domain = org.yourname
-version = 0.1
-source.dir = .
-source.include_exts = py,png,jpg,kv,atlas
-requirements = python3,kivy==2.3.0
-orientation = portrait
-fullscreen = 0
-android.api = 33
-android.minapi = 21
-android.ndk = 25b
-android.archs = arm64-v8a
-android.accept_sdk_license = True
-p4a.branch = v2024.01.21
+name: Build APK
 
-[buildozer]
-log_level = 2
-warn_on_root = 1
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev
+          pip install --upgrade pip
+          pip install buildozer cython==0.29.36
+
+      - name: Build APK
+        run: |
+          buildozer android debug > build.log 2>&1 || (grep -n -i -E "error|failed|not found|No such" build.log | tail -n 40; exit 1)
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-log
+          path: build.log
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: listapp-apk
+          path: bin/*.apk
