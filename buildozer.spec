@@ -1,41 +1,20 @@
 [app]
-
-# ───────────────────────────────
-#  App identity
-# ───────────────────────────────
 title = ListApp
 package.name = listapp
 package.domain = org.yourname
 version = 0.1
-
-# ───────────────────────────────
-#  Source files
-# ───────────────────────────────
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
-
-# ───────────────────────────────
-#  Requirements
-# ───────────────────────────────
-requirements = python3,kivy
-
-# ───────────────────────────────
-#  Display
-# ───────────────────────────────
+requirements = python3,kivy==2.3.0
 orientation = portrait
 fullscreen = 0
-
-# ───────────────────────────────
-#  Android settings
-# ───────────────────────────────
 android.api = 33
 android.minapi = 21
-android.archs = arm64-v8a, armeabi-v7a
+android.ndk = 25b
+android.archs = arm64-v8a
 android.accept_sdk_license = True
-
+p4a.branch = v2024.01.21
 
 [buildozer]
-
-# Log level: 0 = errors only, 1 = info, 2 = debug
-log_level = 1
+log_level = 2
 warn_on_root = 1
