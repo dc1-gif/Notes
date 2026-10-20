@@ -23,7 +23,11 @@ jobs:
 
       - name: Build APK
         run: |
-          buildozer android debug > build.log 2>&1 || (grep -n -i -E "error|failed|not found|No such" build.log | tail -n 40; exit 1)
+          buildozer android debug > build.log 2>&1 || {
+            L=$(grep -n "Command failed" build.log | head -1 | cut -d: -f1)
+            sed -n "$((L-60)),$((L))p" build.log
+            exit 1
+          }
 
       - uses: actions/upload-artifact@v4
         if: always()
